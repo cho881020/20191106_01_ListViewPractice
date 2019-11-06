@@ -16,16 +16,39 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupEvents()
+        setValues()
+
+    }
+
+    fun setValues() {
 
         addNotices()
-
         noticeAdapter = NoticeAdapter(this, noticeList)
         noticeListView.adapter = noticeAdapter
+    }
 
+    fun setupEvents() {
+
+        addNoticeBtn.setOnClickListener {
+            noticeList.add(NoticeData("새 공지사항", "내용도 적어봅니다.", "2019-11-06"))
+
+//            데이터 변경사항 => 리스트뷰에 반영
+            noticeAdapter?.notifyDataSetChanged()
+
+//            10칸 => 9번. 150칸 => 149
+            noticeListView.smoothScrollToPosition(noticeList.size - 1)
+
+
+        }
+
+        scrollToUpBtn.setOnClickListener {
+            noticeListView.smoothScrollToPosition(0)
+        }
 
         noticeListView.setOnItemClickListener { parent, view, position, id ->
 
-//            Toast.makeText(this, "${position} 번째 줄 클릭", Toast.LENGTH_SHORT).show()
+            //            Toast.makeText(this, "${position} 번째 줄 클릭", Toast.LENGTH_SHORT).show()
 
             var noticeData = noticeList.get(position)
 
@@ -43,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             return@setOnItemLongClickListener true
 
         }
-
     }
 
     fun addNotices() {
